@@ -43,6 +43,12 @@ pnpm start
 
 数据库连接仅使用服务器环境变量，绝不能加 NEXT_PUBLIC 前缀。可直接部署到 Vercel，并配置同样的环境变量。当前未进行线上部署。
 
+### Vercel 数据库连接
+
+部署环境的 `DATABASE_URL` 应使用 Supabase 控制台 Connect 中的 **Transaction pooler** 连接串（通常为 `*.pooler.supabase.com:6543`），参见 [官方连接说明](https://supabase.com/docs/guides/database/connecting-to-postgres)。迁移工具继续使用适合迁移的直连或 Session pooler 连接串，不要盲目替换所有数据库端口。修改 Vercel 环境变量后需重新部署。
+
+应用每个进程最多使用 1 个连接，空闲 20 秒后释放，并复用开发热更新之间的连接池。真实公司数据只在请求时查询，构建不依赖数据库可用性；未配置数据库时仍可静态生成演示页面。若出现 `MAXCONNSESSION`，检查部署是否仍使用 Session pooler，以及旧部署或本地进程是否占用了连接。单进程限额不等于所有部署实例的总连接限额。
+
 ## 已实现
 
 首页、公司搜索与筛选、公司详情、城市/岗位/时间范围统计、下班时间分布、双休榜、结构化匿名评价、注册登录、个人收藏与评价进度、评价点赞、回复及举报提交、公司投稿和内容审核。

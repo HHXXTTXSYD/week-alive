@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { connection } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "./index";
 import * as schema from "./schema";
@@ -8,6 +9,8 @@ import type { Review } from "@/lib/domain";
 export const getCatalog = cache(async () => {
   if (!db)
     return { companies: demoCompanies, reviews: demoReviews, demo: true };
+  // Live data must not open database connections in prerender workers.
+  await connection();
   const [companies, locations, rows] = await Promise.all([
     db.select().from(schema.companies),
     db.select().from(schema.locations),
