@@ -7,6 +7,7 @@ import * as s from "@/db/schema";
 import { requireUser, isAdmin, authClient } from "@/lib/auth";
 import { reviewSchema } from "@/lib/domain";
 import { ActionError } from "@/lib/action-error";
+import { authErrorMessage } from "@/lib/auth-error";
 export async function mutate(
   kind: string,
   payload: unknown,
@@ -160,7 +161,10 @@ export async function authenticate(mode: string, form: FormData) {
       message: "当前为演示模式，请配置 Supabase 后使用登录注册。",
     };
   const parsed = z
-    .object({ email: z.email(), password: z.string().min(8) })
+    .object({
+      email: z.string().trim().pipe(z.email()),
+      password: z.string().min(8),
+    })
     .safeParse(Object.fromEntries(form));
   if (!parsed.success)
     return { ok: false, message: "请输入有效邮箱和至少 8 位密码" };
@@ -168,18 +172,24 @@ export async function authenticate(mode: string, form: FormData) {
     mode === "signup"
       ? await client.auth.signUp(parsed.data)
       : await client.auth.signInWithPassword(parsed.data);
-  if (result.error)
+  if (result.error) {
+    console.error("Authentication failed", {
+      mode,
+      code: result.error.code,
+      status: result.error.status,
+    });
     return {
       ok: false,
-      message:
-        mode === "signup"
-          ? "注册失败，请检查邮箱或稍后重试"
-          : "登录失败，请检查邮箱和密码",
+      message: authErrorMessage(result.error.code, mode),
     };
+  }
   revalidatePath("/", "layout");
   return {
     ok: true,
-    message: mode === "signup" ? "注册成功，请查看邮箱完成验证。" : "登录成功",
+    authenticated: Boolean(result.data.session),
+    message: result.data.session
+      ? "登录成功"
+      : "请查看邮箱完成验证；如果已有账号，请直接登录。",
   };
 }
 export async function signOut() {

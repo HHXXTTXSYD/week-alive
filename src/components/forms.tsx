@@ -229,27 +229,40 @@ export function LoginForm() {
       }}
     >
       <TabsList className="auth-tabs" aria-label="账号操作">
-        <TabsTrigger value="login">登录</TabsTrigger>
-        <TabsTrigger value="signup">注册</TabsTrigger>
+        <TabsTrigger value="login" disabled={pending}>登录</TabsTrigger>
+        <TabsTrigger value="signup" disabled={pending}>注册</TabsTrigger>
       </TabsList>
       <TabsContent value={mode}>
         <form
-          action={(form) =>
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (pending) return;
+            const element = event.currentTarget;
+            const form = new FormData(element);
+            setMessage("");
             start(async () => {
-              const result = await authenticate(mode, form);
-              setMessage(result.message);
-              if (result.ok && mode === "login") {
-                router.push("/me");
-                router.refresh();
+              try {
+                const result = await authenticate(mode, form);
+                setMessage(result.message);
+                if (result.ok) {
+                  element.reset();
+                  if (result.authenticated) {
+                    router.push("/me");
+                    router.refresh();
+                  }
+                }
+              } catch {
+                setMessage("暂时无法连接登录注册服务，请稍后重试。");
               }
-            })
-          }
+            });
+          }}
         >
           <Label>
             邮箱
             <Input
               name="email"
               type="email"
+              readOnly={pending}
               autoComplete="email"
               required
               placeholder="you@example.com"
@@ -260,6 +273,7 @@ export function LoginForm() {
             <Input
               name="password"
               type="password"
+              readOnly={pending}
               minLength={8}
               required
               autoComplete={

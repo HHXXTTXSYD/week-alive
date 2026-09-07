@@ -37,6 +37,7 @@ pnpm start
 2. 数据库迁移工具通过当前进程的 DATABASE_URL 读取连接。执行迁移前将环境变量加载到终端，再执行 `pnpm db:migrate`。
 3. 迁移完成后运行 `database/security.sql`，关闭浏览器 Data API 对业务表的访问。业务数据库仅由服务器 Drizzle 访问。
 4. Supabase 启用 Email/Password 登录及邮箱验证，配置项目 Site URL。邮箱确认后回站登录。
+   面向公开用户注册时，需配置 [自定义 SMTP](https://supabase.com/docs/guides/auth/auth-smtp)。默认邮件服务仅支持项目团队邮箱，并有严格发送限额。若注册失败，在服务端日志搜索 `Authentication failed`，根据 `code` 排查：`email_address_not_authorized` 表示邮件收件人限制，`over_email_send_rate_limit` 表示邮件限额，`unexpected_failure` 需结合 Supabase Auth 日志检查邮件服务或数据库错误。日志不记录邮箱和密码。
 5. 将管理员 Supabase 用户 UUID 填入 `ADMIN_USER_IDS`，多个使用英文逗号分隔；重新启动服务。
 6. 用户通过 `/companies/submit` 投稿，管理员在 `/admin` 通过后自动创建公司和办公城市；真实模式不会混入虚构种子。
 
