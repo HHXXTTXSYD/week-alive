@@ -4,19 +4,15 @@ import {
   Bookmark,
   MessageSquare,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 import { LoginForm } from "@/components/forms";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 export const metadata = { title: "登录与注册" };
 export default function Login() {
   return (
     <div className="container auth-container">
       <aside className="auth-story">
-        <Badge variant="outline">
-          <Sparkles size={14} /> YOUR NEXT CHAPTER
-        </Badge>
+        <span className="section-kicker">周末活着 / 给认真生活的人</span>
         <h2>
           下一份工作，
           <br />
@@ -61,7 +57,7 @@ export default function Login() {
       <Card className="auth-panel">
         <CardContent>
           <div className="auth-intro">
-            <span className="section-kicker">WELCOME TO SHUANGXIUMA</span>
+            <span className="section-kicker">好久不见 / 欢迎加入</span>
             <h1>欢迎来到周末活着</h1>
             <p>好工作和好生活，都值得认真选择。</p>
           </div>

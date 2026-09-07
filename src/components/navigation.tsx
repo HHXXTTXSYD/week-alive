@@ -2,14 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Palmtree,
-  Building2,
-  Trophy,
-  UserRound,
-  House,
-  PenLine,
-} from "lucide-react";
+import { Building2, Trophy, UserRound, House, PenLine } from "lucide-react";
 const links = [
   { href: "/", label: "首页", icon: House },
   { href: "/companies", label: "公司库", icon: Building2 },
@@ -22,8 +15,8 @@ export function Navigation() {
       <header className="header">
         <div className="container header-inner">
           <Link className="brand" href="/">
-            <span className="brand-icon">
-              <Palmtree size={25} />
+            <span className="brand-icon" aria-hidden="true">
+              休
             </span>
             周末活着<span className="brand-dot">.</span>
           </Link>

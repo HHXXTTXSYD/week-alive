@@ -3,13 +3,11 @@ import {
   ArrowRight,
   ArrowUpRight,
   Building2,
-  CalendarDays,
   Check,
   Clock3,
   Compass,
   MessageSquare,
   ShieldCheck,
-  Sun,
   Trophy,
 } from "lucide-react";
 import { getCatalog } from "@/db/queries";
@@ -37,17 +35,16 @@ export default async function Home() {
       <section className="hero">
         <div className="container hero-inner">
           <div className="hero-copy">
-            <Badge variant="outline" className="hero-badge">
-              <span className="status-dot" /> 为认真生活的人，找一份好工作{" "}
-              <ArrowUpRight size={13} />
-            </Badge>
+            <div className="hero-kicker">
+              工作生活指南 <span> / </span> 给下班后的你
+            </div>
             <h1>
               好工作，
               <br />
               也该有<span>好周末。</span>
             </h1>
             <p>
-              找一家真正双休的公司。
+              双休不是福利，是生活的起点。
               <br />
               从员工的真实体验，看见招聘信息之外的日常。
             </p>
@@ -72,39 +69,27 @@ export default async function Home() {
               </span>
             </div>
           </div>
-          <div className="weekend-visual" aria-hidden="true">
-            <div className="visual-topline">
-              <span>WORK / LIFE</span>
-              <span>
-                找到你的平衡点 <ArrowUpRight size={14} />
-              </span>
+          <div className="weekend-calendar" aria-label="周六、周日，留给生活">
+            <div className="calendar-heading">
+              <span>周末，留白。</span>
+              <span>THE WEEKEND EDIT</span>
             </div>
-            <div className="weekend-orbit">
-              <div className="orbit-label">有时间，做喜欢的事。</div>
-              <Sun className="orbit-sun" strokeWidth={1} />
-              <strong>
-                OFF
-                <br />
-                <span>WORK.</span>
-              </strong>
-              <div className="orbit-pill">
-                <span className="status-dot" /> 生活，已上线
+            <div className="calendar-days">
+              <div>
+                <span>星期六 / SAT</span>
+                <strong>六</strong>
+                <p>睡到自然醒</p>
+              </div>
+              <div>
+                <span>星期日 / SUN</span>
+                <strong>日</strong>
+                <p>去过自己的生活</p>
               </div>
             </div>
-            <div className="week-strip">
-              {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map(
-                (day, i) => (
-                  <div className={i > 4 ? "rest-day" : ""} key={day}>
-                    <span>{day}</span>
-                    {i > 4 ? <Sun size={18} /> : <span className="work-dot" />}
-                  </div>
-                ),
-              )}
-            </div>
-            <div className="visual-foot">
-              <CalendarDays size={16} />
-              <span>每一周，都有值得期待的两天。</span>
-              <span>02 / 07</span>
+            <div className="calendar-footer">
+              <span>本周待办</span>
+              <strong>好好生活</strong>
+              <span className="calendar-stamp">不加班</span>
             </div>
           </div>
         </div>
@@ -113,7 +98,7 @@ export default async function Home() {
         <div className="discovery-bar">
           <div>
             <Compass size={19} />
-            <span>少一点猜测，多一点依据。</span>
+            <span>找工作，也要看下班以后。</span>
           </div>
           <div>
             <b>{companies.length}</b> 家已收录公司
@@ -123,8 +108,8 @@ export default async function Home() {
         </div>
         <div className="section-heading">
           <div>
-            <span className="section-kicker">COMPANIES TO EXPLORE</span>
-            <h2>发现值得了解的公司</h2>
+            <span className="section-kicker">01 / 公司观察</span>
+            <h2>下一站，去哪上班？</h2>
             <p>作息、双休、团队体验，一起看清楚。</p>
           </div>
           <Button asChild variant="outline">
@@ -159,8 +144,8 @@ export default async function Home() {
           <section>
             <div className="section-heading">
               <div>
-                <span className="section-kicker">VOICES FROM INSIDE</span>
-                <h2>真实体验，值得被听见</h2>
+                <span className="section-kicker">02 / 下班后聊聊</span>
+                <h2>在这里工作，是什么感觉</h2>
               </div>
               <Badge variant="secondary">员工视角</Badge>
             </div>
@@ -195,7 +180,7 @@ export default async function Home() {
             <Card className="ranking-promo">
               <div className="promo-top">
                 <Trophy size={22} />
-                <span>THE WEEKEND LIST</span>
+                <span>周末活着 · 双休榜</span>
                 <ArrowUpRight size={18} />
               </div>
               <h2>
